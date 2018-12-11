@@ -7,9 +7,6 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate, Change
     
     //Constants
     let WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather"
-    let APP_ID = "BADBAD"
-    /***Get your own App ID at https://openweathermap.org/appid ****/
-    
 
     //TODO: Declare instance variables here
     let locationManager = CLLocationManager()
@@ -19,7 +16,8 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate, Change
     @IBOutlet weak var weatherIcon: UIImageView!
     @IBOutlet weak var cityLabel: UILabel!
     @IBOutlet weak var temperatureLabel: UILabel!
-
+    @IBOutlet weak var degreeSwitch: UISwitch!
+    @IBOutlet weak var degreeStatus: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,6 +28,19 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate, Change
         locationManager.requestWhenInUseAuthorization()
         locationManager.startUpdatingLocation()
     }
+    
+    @IBAction func onDegreeSwitchPressed(_ sender: UISwitch) {
+        
+        // do not have to change the degree of what we keep track of in VC, jsut what we print
+        if (sender.isOn) {
+            temperatureLabel.text = "\(weatherDataModel.temperature * 9/5 + 32)°"
+            degreeStatus.text = "°F"
+        } else {
+            temperatureLabel.text = "\(weatherDataModel.temperature)°"
+            degreeStatus.text = "°C"
+        }
+    }
+    
     
     //MARK: - Networking
     /***************************************************************/
@@ -75,7 +86,8 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate, Change
     
     func updateUIWithWeatherData() {
         cityLabel.text = weatherDataModel.city
-        temperatureLabel.text = "\(weatherDataModel.temperature)°C"
+        print(weatherDataModel.temperature)
+        temperatureLabel.text = "\(weatherDataModel.temperature)°"
         weatherIcon.image = UIImage(named: weatherDataModel.weatherIconName)
     }
     
